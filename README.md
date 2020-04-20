@@ -42,7 +42,7 @@ const cache = new ConfigurationCache()
 
 // You could just export the cache here, but I prefer this method
 // because destructuring class functions is a bad idea.
-module.exports = module.exports = {
+module.exports = {
   getConfiguration: () => cache.get(),
   invalidate: () => cache.invalidate()
 }
