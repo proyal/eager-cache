@@ -8,7 +8,7 @@ Notes about this implementation:
 - You must extend this class with a new class that implements the `async _load()` function.
 - Optionally, you can override the `async _invalidate()` function to perform any cleanup on the existing cache during invalidation.
 - Invalidation is not automatic - it must be called explicitly.
-- If `async _load()` fails, the current implementation leaves the cache in a failed state, and will not try to recover. I'd like to make this optional, in the future.
+- If `async _load()` fails, pending promises will reject, but future calls to `get()` will attempt to reload the cache.
 - Multiple attempts to get the contents of the cache while it's invalid, or loading, will not cause multiple load attempts. The calls will wait until the pending load is complete.
 - eager-cache uses [debug](https://www.npmjs.com/package/debug). All eager-cache instances will have a logger named `eager-cache:moniker`, where moniker is defined in the eager-cache constructor. eager-cache logging isn't intended to be very verbose, but it will log most state changes, for example, when invalidated.
 

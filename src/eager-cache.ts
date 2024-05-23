@@ -31,8 +31,13 @@ export abstract class EagerCache extends EventEmitter {
     this.emit(this.ON_STATE_CHANGE, cacheState)
   }
 
+  canLoad(): boolean {
+    return this.cacheState === CacheState.Invalid
+      || this.cacheState === CacheState.Failed
+  }
+
   load(): void {
-    if (this.cacheState !== CacheState.Invalid) return
+    if (!this.canLoad()) return
     this.setState(CacheState.Loading)
     const loadCount = ++this.loadCount
     this.cache = null
@@ -74,6 +79,9 @@ export abstract class EagerCache extends EventEmitter {
           this.debug('Invalid state while loading. Reloading.')
           setImmediate(() => this.load())
           return
+        case CacheState.Failed:
+          this.debug('Failed state while loading.')
+          return
         default:
           this.debug(Error(`Unexpected state during load: ${this.cacheState}`))
       }
@@ -98,6 +106,7 @@ export abstract class EagerCache extends EventEmitter {
         resolve(this.cache)
         return
       case CacheState.Invalid:
+      case CacheState.Failed:
         this.debug(
           `${this.cacheState} state while getting. Loading and waiting for state change.`
         )

@@ -78,4 +78,20 @@ describe('eager-cache', () => {
       )
     }
   })
+
+  test('cache can load after failure', async () => {
+    const cache = new TestCache()
+    cache.loadWillFail = true
+    try {
+      await cache.get()
+    } catch (err) {
+      expect(err).toEqual(
+        Error('Cache failed to load, or invalid cache state. State: FAILED')
+      )
+    }
+    cache.loadWillFail = false
+    cache.nextValue = 3
+    const value = await cache.get()
+    expect(value).toEqual(3)
+  })
 })
