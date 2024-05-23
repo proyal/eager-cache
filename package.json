@@ -1,6 +1,6 @@
 {
   "name": "eager-cache",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Cache that 'eagerly' fetches everything it intends to hold in a single request.",
   "engines": {
     "node": ">=10"
